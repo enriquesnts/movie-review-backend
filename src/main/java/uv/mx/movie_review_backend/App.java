@@ -2,10 +2,12 @@
 package uv.mx.movie_review_backend;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.server.ResponseStatusException;
 import uv.mx.movie_review_backend.model.Movie;
 import uv.mx.movie_review_backend.model.Usuario;
 import uv.mx.movie_review_backend.repo.MovieRepo;
@@ -37,7 +39,7 @@ public class App {
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             if (e.getMessage().contains("correo")) {
-                return ResponseEntity.badRequest().build();
+               throw new ResponseStatusException(HttpStatus.CONFLICT, "Correo ya existe");
             }
             return ResponseEntity.internalServerError().build();
         }
