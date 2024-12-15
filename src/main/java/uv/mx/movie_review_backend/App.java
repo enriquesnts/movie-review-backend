@@ -15,7 +15,7 @@ import uv.mx.movie_review_backend.model.Usuario;
 import uv.mx.movie_review_backend.repo.MovieRepo;
 import uv.mx.movie_review_backend.repo.UsuarioRepo;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class App {
 
@@ -35,7 +35,7 @@ public class App {
         return movieRepo.findById(id);
     }
 
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/registro")
     ResponseEntity<Object> crearUsuario(@RequestBody Usuario nuevoUsuario) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
