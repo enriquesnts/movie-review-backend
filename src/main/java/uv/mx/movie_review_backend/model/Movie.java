@@ -1,10 +1,8 @@
 package uv.mx.movie_review_backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import java.util.Collection;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "movies")
@@ -16,6 +14,9 @@ public class Movie {
     private int year;
     private String external_id;
     private String movie_poster_url;
+    @OneToMany
+    @JoinColumn(name = "movie_id", nullable = false, insertable = false, updatable = false)
+    private Collection<Review> reviews;
 
     public String getMovie_poster_url() {
         return movie_poster_url;
@@ -31,5 +32,13 @@ public class Movie {
 
     public int getYear() {
         return year;
+    }
+
+    public Collection<Review> getReviews() {
+        return reviews;
+    }
+
+    public Integer getMovieId() {
+        return movie_id;
     }
 }

@@ -1,11 +1,8 @@
 package uv.mx.movie_review_backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -31,6 +28,15 @@ public class Usuario {
     public String getCorreo() {
         return this.correo;
     }
+
+
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<Review> reviews;
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
 
     public String contrasena() {
         return this.contrasena;

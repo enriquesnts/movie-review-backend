@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.server.ResponseStatusException;
 import uv.mx.movie_review_backend.model.Movie;
+import uv.mx.movie_review_backend.model.Review;
 import uv.mx.movie_review_backend.model.Usuario;
 import uv.mx.movie_review_backend.repo.MovieRepo;
+import uv.mx.movie_review_backend.repo.ReviewRepo;
 import uv.mx.movie_review_backend.repo.UsuarioRepo;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -25,6 +27,8 @@ public class App {
     @Autowired
     UsuarioRepo usuarioRepo;
 
+    @Autowired
+    ReviewRepo reviewRepo;
     @GetMapping("/peliculas")
     Iterable<Movie> listMovies() {
         return movieRepo.findAll();
@@ -52,5 +56,15 @@ public class App {
             return ResponseEntity.internalServerError().build();
         }
 
+    }
+
+    @PostMapping("/peliculas/{movieId}/review")
+    ResponseEntity<Object> crearReview(@PathVariable Integer movieId, @RequestBody Review review) {
+        if (!movieRepo.existsById(movieId)) {
+            return ResponseEntity.notFound().build();
+        }
+        review.setMovieId(movieId);
+        reviewRepo.save(review);
+        return ResponseEntity.ok().body(review);
     }
 }
