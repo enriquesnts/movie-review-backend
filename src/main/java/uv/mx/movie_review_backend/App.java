@@ -58,6 +58,22 @@ public class App {
         }
     }
 
+    @PostMapping("/login")
+    ResponseEntity<Object> login(@RequestBody Usuario usuario) {
+        Optional<Usuario> existente = usuarioRepo.findByCorreo(usuario.getCorreo());
+        if (existente.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        // Compara la contraseña recibida con la que está guardada encriptida
+        if (passwordEncoder.matches(usuario.getContrasena(), existente.get().getContrasena())) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+    }
+
     @PostMapping("/peliculas/{movieId}/review")
     ResponseEntity<Object> crearReview(@PathVariable Integer movieId, @RequestBody Review review) {
         if (!movieRepo.existsById(movieId)) {

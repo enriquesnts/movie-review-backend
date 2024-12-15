@@ -38,4 +38,7 @@ public class Usuario {
         return reviews;
     }
 
+    public String getContrasena() {
+        return contrasena;
+    }
 }
