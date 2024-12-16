@@ -19,3 +19,12 @@ Crear review
         "rating": 5,
         "review": "great"
     }'
+
+Login
+
+    curl -X POST 'localhost:8080/login' \
+    -H 'Content-Type: application/json' \
+    --data-raw '{
+    "correo": "juanperez@gmail.com",
+    "contrasena": "1234"
+    }'
