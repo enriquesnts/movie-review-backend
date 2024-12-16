@@ -1,3 +1,4 @@
 .vscode/
 target/
 movie-reviews.db
+.idea/
