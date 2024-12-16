@@ -1,6 +1,8 @@
 
 package uv.mx.movie_review_backend;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,13 @@ public class App {
     Iterable<Movie> listMovies() {
         return movieRepo.findAll();
     }
+
+    @GetMapping("/peliculas/{id}")
+    Optional<Movie> getMovie(@PathVariable int id) {
+        return movieRepo.findById(id);
+    }
+
+    
 
     @PostMapping("/registro")
     ResponseEntity<Object> crearUsuario(@RequestBody Usuario nuevoUsuario) {
