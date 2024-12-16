@@ -145,5 +145,5 @@ VALUES (1, "The Shawshank Redemption", 1994,
         "tt0032553"),
        (50, "The Hunt", 2012,
         "https://m.media-amazon.com/images/M/MV5BMTg2NDg3ODg4NF5BMl5BanBnXkFtZTcwNzk3NTc3Nw@@._V1_SX300.jpg",
-        "tt2106476")
+        "tt2106476") ON CONFLICT DO NOTHING;
 ;
