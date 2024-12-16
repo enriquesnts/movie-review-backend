@@ -1,4 +1,3 @@
-
 package uv.mx.movie_review_backend;
 
 import java.util.Optional;
@@ -10,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.server.ResponseStatusException;
+import org.sqlite.SQLiteException;
 import uv.mx.movie_review_backend.model.Movie;
 import uv.mx.movie_review_backend.model.Review;
 import uv.mx.movie_review_backend.model.Usuario;
@@ -29,6 +29,7 @@ public class App {
 
     @Autowired
     ReviewRepo reviewRepo;
+
     @GetMapping("/peliculas")
     Iterable<Movie> listMovies() {
         return movieRepo.findAll();
@@ -43,19 +44,18 @@ public class App {
     @PostMapping("/registro")
     ResponseEntity<Object> crearUsuario(@RequestBody Usuario nuevoUsuario) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(nuevoUsuario.contrasena());
-        nuevoUsuario.contrasena(hashedPassword);
+        String hashedPassword = passwordEncoder.encode(nuevoUsuario.setContrasena());
+        nuevoUsuario.setContrasena(hashedPassword);
         try {
             Usuario saved = usuarioRepo.save(nuevoUsuario);
             System.out.println("Saved user: " + saved.getCorreo());
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            if (e.getMessage().contains("correo")) {
-               throw new ResponseStatusException(HttpStatus.CONFLICT, "Correo ya existe");
+            if (e.getCause().getCause() instanceof SQLiteException) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "Correo ya existe");
             }
             return ResponseEntity.internalServerError().build();
         }
-
     }
 
     @PostMapping("/peliculas/{movieId}/review")
