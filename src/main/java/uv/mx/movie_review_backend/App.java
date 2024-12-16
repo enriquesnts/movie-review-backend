@@ -35,7 +35,6 @@ public class App {
         return movieRepo.findById(id);
     }
 
-    
 
     @PostMapping("/registro")
     ResponseEntity<Object> crearUsuario(@RequestBody Usuario nuevoUsuario) {
