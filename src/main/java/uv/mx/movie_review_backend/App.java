@@ -1,5 +1,6 @@
 package uv.mx.movie_review_backend;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.server.ResponseStatusException;
 import org.sqlite.SQLiteException;
+import uv.mx.movie_review_backend.auth.JwtHelper;
 import uv.mx.movie_review_backend.model.Movie;
 import uv.mx.movie_review_backend.model.Review;
 import uv.mx.movie_review_backend.model.Usuario;
@@ -43,12 +45,13 @@ public class App {
     @PostMapping("/registro")
     ResponseEntity<Object> crearUsuario(@RequestBody Usuario nuevoUsuario) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(nuevoUsuario.setContrasena());
+        String hashedPassword = passwordEncoder.encode(nuevoUsuario.getContrasena());
         nuevoUsuario.setContrasena(hashedPassword);
         try {
-            Usuario saved = usuarioRepo.save(nuevoUsuario);
-            System.out.println("Saved user: " + saved.getCorreo());
-            return ResponseEntity.noContent().build();
+            Usuario usuarioGuardado = usuarioRepo.save(nuevoUsuario);
+            System.out.println("Usuario guardado: " + usuarioGuardado.getCorreo());
+            usuarioGuardado.setContrasena(null);
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioGuardado);
         } catch (Exception e) {
             if (e.getCause().getCause() instanceof SQLiteException) {
                 throw new ResponseStatusException(HttpStatus.CONFLICT, "Correo ya existe");
@@ -64,9 +67,11 @@ public class App {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        // Compara la contraseña recibida con la que está guardada encriptida
+        // Compara la contraseña recibida con la que está guardada encriptada
         if (passwordEncoder.matches(usuario.getContrasena(), existente.get().getContrasena())) {
-            return ResponseEntity.ok().build();
+            HashMap <String, String> tokenMapa = new HashMap<>();
+            tokenMapa.put("token", JwtHelper.createJwtToken(usuario));
+            return ResponseEntity.ok(tokenMapa);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

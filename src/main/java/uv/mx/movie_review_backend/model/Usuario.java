@@ -1,11 +1,13 @@
 package uv.mx.movie_review_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "users")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -14,6 +16,10 @@ public class Usuario {
     @Column(unique = true)
     private String correo;
     private String contrasena;
+
+    public Integer getId() {
+        return id;
+    }
 
     public String getNombre() {
         return this.nombre;

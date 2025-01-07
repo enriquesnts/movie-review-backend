@@ -1,6 +1,7 @@
 Lista de peliculas
 
-    curl http://localhost:8080/peliculas
+    curl http://localhost:8080/peliculas \
+    --header 'Authorization: Bearer <token>' \
 
 Crear usuario
 
@@ -14,6 +15,7 @@ Crear review
 
     curl -X POST 'localhost:8080/peliculas/2/review' \
     --header 'Content-Type: application/json' \
+    --header 'Authorization: Bearer <token>' \
     --data '{
         "userId": 1,
         "rating": 5,
