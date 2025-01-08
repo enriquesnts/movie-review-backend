@@ -19,7 +19,7 @@ import uv.mx.movie_review_backend.repo.MovieRepo;
 import uv.mx.movie_review_backend.repo.ReviewRepo;
 import uv.mx.movie_review_backend.repo.UsuarioRepo;
 
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class App {
 

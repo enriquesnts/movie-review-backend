@@ -36,7 +36,11 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         // Indicamos que no se valide el token para el login y el registro
-        return request.getRequestURI().contains("login") || request.getRequestURI().contains("registro");
+        // o si el request es options
+        return request.getRequestURI().contains("login")
+                || request.getRequestURI().contains("registro")
+                || request.getMethod().equalsIgnoreCase("OPTIONS");
+
     }
     private void returnAuthError(HttpServletResponse response) throws IOException {
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
