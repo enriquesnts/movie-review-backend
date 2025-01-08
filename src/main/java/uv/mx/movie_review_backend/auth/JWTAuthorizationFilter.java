@@ -29,7 +29,10 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             validarToken(request);
             chain.doFilter(request, response);
         } catch (Exception e) {
-            returnAuthError(response);
+            if (e instanceof JwtException) {
+                returnAuthError(response);
+            }
+            throw e;
         }
     }
 
