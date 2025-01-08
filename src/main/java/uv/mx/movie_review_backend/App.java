@@ -69,9 +69,12 @@ public class App {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         // Compara la contraseña recibida con la que está guardada encriptada
         if (passwordEncoder.matches(usuario.getContrasena(), existente.get().getContrasena())) {
-            HashMap <String, String> tokenMapa = new HashMap<>();
-            tokenMapa.put("token", JwtHelper.createJwtToken(usuario));
-            return ResponseEntity.ok(tokenMapa);
+            HashMap<String, String> usuarioInfoMapa = new HashMap<>();
+            usuarioInfoMapa.put("token", JwtHelper.createJwtToken(usuario));
+            usuarioInfoMapa.put("correo", existente.orElseThrow().getCorreo());
+            usuarioInfoMapa.put("nombre", existente.orElseThrow().getNombre());
+            usuarioInfoMapa.put("usuarioId", existente.orElseThrow().getId().toString());
+            return ResponseEntity.ok(usuarioInfoMapa);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
