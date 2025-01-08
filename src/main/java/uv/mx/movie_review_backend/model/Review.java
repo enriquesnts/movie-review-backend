@@ -1,6 +1,7 @@
 package uv.mx.movie_review_backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -57,5 +58,18 @@ public class Review {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Integer getReview_id() {
+        return review_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = Integer.parseInt(user_id);
+    }
+
+    @JsonProperty("nombreUsuario")
+    public String getNombreUsuario() {
+        return usuario.getNombre();
     }
 }

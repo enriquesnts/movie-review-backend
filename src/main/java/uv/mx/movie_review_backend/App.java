@@ -87,7 +87,9 @@ public class App {
             return ResponseEntity.notFound().build();
         }
         review.setMovieId(movieId);
-        reviewRepo.save(review);
-        return ResponseEntity.ok().body(review);
+        var saved = reviewRepo.save(review);
+        var usuario = usuarioRepo.findById(review.getUserId()).orElseThrow();
+        saved.setUsuario(usuario);
+        return ResponseEntity.ok().body(saved);
     }
 }
